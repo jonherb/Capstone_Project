@@ -123,7 +123,7 @@ def make_output():
     user_inp = {}
     
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
-    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'50000'}
+    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'200000'}
     
     cutoff = pd.to_datetime('2015-08-01 00:00:00')
     
@@ -260,7 +260,7 @@ def make_output():
     user_inp['ticker_symbol'] = companyTickerSymbols[user_inp['company_name']]
     
     
-    stock_payload = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['stock_label'], 
+    stock_payload = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol'], 
            'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
     
     # possibly last 6 months only 
