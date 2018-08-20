@@ -280,7 +280,7 @@ def make_output():
     df = df[df['product'] == user_inp['product']]
     df = df.assign(issue = df['issue'].astype(str))
     issuesPlot = Bar(df, 'issue', y_axis_label = 'Complaint frequency', title = 'Frequency of Complaint Issues for ' \ 
-                     user_inp['product'] ' Products by ' + user_inp['company_name'], legend = False)
+                    + user_inp['product'] ' +  Products by ' + user_inp['company_name'], legend = False)
     output_html = file_html(issuesPlot, CDN, 'issues plot')
     
     
