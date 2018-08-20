@@ -123,7 +123,9 @@ def make_output():
     user_inp = {}
     
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
-    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'200000'}
+    # can't seem to pre-filter by date (perhaps in char format in database?); however can pre-select columns:
+    cc_payload = {'$$app_token': CFPB_APP_KEY, '$select': 'company, product, issue, date_received, complaint_what_happened', 
+                  '$limit':'300000'}
     
     cutoff = pd.to_datetime('2015-08-01 00:00:00')
     
@@ -137,7 +139,6 @@ def make_output():
     
     
 
-    
     prodCombine_dict = {
          'Bank_Account': ['Bank account or service', 'Checking or savings account'],
          'Consumer_Loan' : ['Consumer Loan', 'Payday loan', 'Payday loan, title loan, or personal loan'],
@@ -285,7 +286,7 @@ def make_output():
     
     # output_html = file_html(fig, CDN, 'output plot')
     
-    return  1000000 # output_html
+    return  (user_inp['company_name'], user_inp['product'], user_inp['ticker_symbol']) # output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
