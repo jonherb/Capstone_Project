@@ -280,23 +280,24 @@ def make_output():
     df = df[df['company'] == user_inp['company_name']]
     df = df[df['product'] == user_inp['product']]
     df = df.assign(issue = df['issue'].astype(str))
+    issuesPlot = Bar(df, 'issue', title = 'issue freq')
+    output_html = file_html(issuesPlot, CDN, 'issues plot')
     
+    
+    """
     date_filter = to_datetime(user_inp['month'])
     year_month_filter = str(date_filter.year) + '-' + str(date_filter.month)
     df_f = df.loc[year_month_filter]
     df_f_close = df_f.loc[:,['timestamp', 'close']]
     
-    issuesPlot = Bar(df, 'issue', title = 'issue freq')
-    
-    
-    """
+  
     fig = figure(x_axis_type="datetime", x_axis_label = 'date', y_axis_label = 'closing price', 
             title = 'Stock Closing Price of ' + user_inp['stock_label'] + ' Over ' + user_inp['month'],)
     
     fig.line('timestamp', 'close', source = df_f)
     """
     
-    output_html = file_html(issuesPlot, CDN, 'issues plot')
+    
     
     return  output_html
 
