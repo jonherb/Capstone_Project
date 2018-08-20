@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect
 import requests as rq
+# import numpy as np
 import pandas as pd
+from bokeh.charts import Bar
 from bokeh.plotting import figure, output_file, show
 from bokeh.resources import CDN
 from bokeh.embed import file_html
@@ -79,9 +81,13 @@ companyTickerSymbols = {}
 for i, key in enumerate(tickerCompanies):
     companyTickerSymbols[key] = tickerSymbols[i]
 
-def categoryCombiner(df, categColumn, categCombine_dict):
+def productCombiner(df, categColumn, categCombine_dict):
     stringToCategs = {v: k for k, vv in categCombine_dict.items() for v in vv}
     return df.assign(product = df[categColumn].map(stringToCategs).astype('category', categories=set(stringToCategs.values())))
+
+def issueCombiner(df, categColumn, categCombine_dict):
+    stringToCategs = {v: k for k, vv in categCombine_dict.items() for v in vv}
+    return df.assign(issue = df[categColumn].map(stringToCategs).astype('category', categories=set(stringToCategs.values())))
 
 """
 dict above was pre-obtained with fuzzy string best-matching to companies having a count of at least 100 complaints (since 2015), when there
@@ -136,6 +142,7 @@ def make_output():
     df = df.set_index('date_received')
     df = df.loc[df.index >= cutoff]
     df['product'] = df['product'].astype('category')
+    df['issue'] = df['issue'].astype('category')
     
     
 
@@ -152,7 +159,7 @@ def make_output():
          'Other' : ['Other financial service']
     }
     
-    df = categoryCombiner(df, 'product', prodCombine_dict)
+    df = productCombiner(df, 'product', prodCombine_dict)
     
     
     struggling_with_payment = ['Struggling to pay your bill', 'Struggling to pay your loan', 'Struggling to pay mortgage',
@@ -237,7 +244,7 @@ def make_output():
     issueCombine_dict = {'Struggling with payment' : struggling_with_payment,
                          'Unexpected fees or interest' : unexpected_fees_or_interest,
                          'Company not crediting payment, or charging a payment fee' : company_not_crediting_payment,
-                         'Account opening, closing, and managment' : account_opening_closing_management,
+                         'Account opening, closing, and management' : account_opening_closing_management,
                          'Problem using services' : problem_using_services,
                          'Approved loan not delivered' : approved_loan_not_delivered,
                          'Disputed transaction, fraud, or poor fraud protection': disputedTransaction_fraud_poorFraudProtection,
@@ -249,7 +256,7 @@ def make_output():
                          'Poor customer service' : poorCustomerService,
                          'Other': other}
     
-    df = categoryCombiner(df, 'issue', issueCombine_dict)
+    df = issueCombiner(df, 'issue', issueCombine_dict)
 
 
     
@@ -270,21 +277,28 @@ def make_output():
 
     # stock_df = stock_df.set_index('timestamp', drop = False)
     
-    """
+    df = df[df['company'] == user_inp['company_name']]
+    df = df[df['product'] == user_inp['product']]
+    df = df.assign(issue = df['issue'].astype(str))
+    
     date_filter = to_datetime(user_inp['month'])
     year_month_filter = str(date_filter.year) + '-' + str(date_filter.month)
     df_f = df.loc[year_month_filter]
     df_f_close = df_f.loc[:,['timestamp', 'close']]
     
+    issuesPlot = Bar(df, 'issue', title = 'issue freq')
+    
+    
+    """
     fig = figure(x_axis_type="datetime", x_axis_label = 'date', y_axis_label = 'closing price', 
             title = 'Stock Closing Price of ' + user_inp['stock_label'] + ' Over ' + user_inp['month'],)
     
     fig.line('timestamp', 'close', source = df_f)
     """
     
-    # output_html = file_html(fig, CDN, 'output plot')
+    output_html = file_html(issuesPlot, CDN, 'issues plot')
     
-    return  'dog' # (user_inp['company_name'], user_inp['product'], user_inp['ticker_symbol']) # output_html
+    return  output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
