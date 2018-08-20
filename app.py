@@ -110,7 +110,7 @@ companyTickerSymbols['TRANSUNION INTERMEDIATE HOLDINGS, INC.'] = 'TRU'
     
 # keys are first specified in heroku:config for app, in proper directory
 CFPB_APP_KEY = os.environ.get('CFPB_APP_KEY')
-ALPHAADVANTAGE_KEY = os.envron.get('ALPHAADVANTAGEKEY')
+ALPHAADVANTAGE_KEY = os.environ.get('ALPHAADVANTAGEKEY')
 
 app = Flask(__name__)
 
