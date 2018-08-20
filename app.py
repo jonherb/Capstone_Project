@@ -260,7 +260,7 @@ def make_output():
     user_inp['ticker_symbol'] = companyTickerSymbols[user_inp['company_name']]
     
     
-    stock_payload = {'function': 'TIME_SERIES_DAILY', 'symbol': user_inp['stock_label'], 'outputsize': 'full', 
+    stock_payload = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['stock_label'], 
            'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
     
     # possibly last 6 months only 
