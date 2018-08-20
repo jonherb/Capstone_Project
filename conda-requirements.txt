@@ -1,5 +1,6 @@
 pandas
-bokeh
+numpy
+bokeh==0.12.4
 dill
 flask
 jinja2
