@@ -1,5 +1,4 @@
 pandas
-numpy
 bokeh==0.12.4
 dill
 flask
