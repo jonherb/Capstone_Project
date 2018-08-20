@@ -284,7 +284,7 @@ def make_output():
     
     # output_html = file_html(fig, CDN, 'output plot')
     
-    return  10000000 # (user_inp['company_name'], user_inp['product'], user_inp['ticker_symbol']) # output_html
+    return  'dog' # (user_inp['company_name'], user_inp['product'], user_inp['ticker_symbol']) # output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
