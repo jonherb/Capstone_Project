@@ -123,11 +123,13 @@ def make_output():
     user_inp = {}
     
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
-    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'500000'}
+    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'400000'}
     
     cutoff = pd.to_datetime('2015-08-01 00:00:00')
     
     df = rq.get(cc_url, cc_payload)
+    df = StringIO(df.text)
+    df = pd.read_csv(df)
     df['date_received'] = pd.to_datetime(df['date_received'])
     df = df.set_index('date_received')
     df = df.loc[df.index >= cutoff]
