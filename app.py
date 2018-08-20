@@ -269,7 +269,7 @@ def make_output():
     stock_df = pd.read_csv(stock_df)
     
 
-    stock_df = stock_df.set_index('timestamp', drop = False)
+    # stock_df = stock_df.set_index('timestamp', drop = False)
     
     """
     date_filter = to_datetime(user_inp['month'])
