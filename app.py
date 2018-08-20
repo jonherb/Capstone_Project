@@ -123,7 +123,7 @@ def make_output():
     user_inp = {}
     
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
-    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'400000'}
+    cc_payload = {'$$app_token': CFPB_APP_KEY, '$limit':'50000'}
     
     cutoff = pd.to_datetime('2015-08-01 00:00:00')
     
