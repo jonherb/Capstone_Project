@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect
 import requests as rq
 # import numpy as np
 import pandas as pd
-from bokeh.charts import Bar
 from bokeh.plotting import figure, output_file, show
 from bokeh.resources import CDN
 from bokeh.embed import file_html
@@ -280,7 +279,8 @@ def make_output():
     df = df[df['company'] == user_inp['company_name']]
     df = df[df['product'] == user_inp['product']]
     df = df.assign(issue = df['issue'].astype(str))
-    issuesPlot = Bar(df, 'issue', title = 'issue freq')
+    issuesPlot = Bar(df, 'issue', y_axis_label = 'Complaint frequency', title = 'Frequency of Complaint Issues for ' \ 
+                     user_inp['product'] ' Products by ' + user_inp['company_name'], legend = False)
     output_html = file_html(issuesPlot, CDN, 'issues plot')
     
     
