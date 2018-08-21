@@ -127,25 +127,33 @@ def get_input():
 @app.route('/', methods = ['POST'])
 def make_output():
     user_inp = {}
+    user_inp['company_name'] = request.form['company_name']
+    user_inp['product'] = request.form['product']
+    user_inp['ticker_symbol'] = companyTickerSymbols[user_inp['company_name']]
     
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
-    # can't seem to pre-filter by date (perhaps in char format in database?); however can pre-select columns:
+    
+    # pre-filtering, to hopefully avoid memory overload and timeout errors
+    # both cutoff and where_filter_string have quotes within the string, to be used in filter-query strings in the payload
+    # double-quotes in case the company_name has an apostrophe
+    # like query is used for company name, as simple = querying doesn't work for companies with & in string
+    cutoff = '"2015-08-01T00:00:00.00"'
+    company_filter_string = '"' + user_inp['company_name'] + '"'
+    where_string = 'company like ' + company_filter_string + ' AND date_received > ' + cutoff
+    
+    
     cc_payload = {'$$app_token': CFPB_APP_KEY, '$select': 'company, product, issue, date_received, complaint_what_happened', 
-                  '$limit':'300000'}
+                  '$where': where_string, '$limit':'300000'}
     
     cutoff = pd.to_datetime('2015-08-01 00:00:00')
     
     df = rq.get(cc_url, cc_payload)
     df = StringIO(df.text)
     df = pd.read_csv(df)
-    df['date_received'] = pd.to_datetime(df['date_received'])
-    df = df.set_index('date_received')
-    df = df.loc[df.index >= cutoff]
     df['product'] = df['product'].astype('category')
     df['issue'] = df['issue'].astype('category')
     
     
-
     prodCombine_dict = {
          'Bank_Account': ['Bank account or service', 'Checking or savings account'],
          'Consumer_Loan' : ['Consumer Loan', 'Payday loan', 'Payday loan, title loan, or personal loan'],
@@ -257,28 +265,20 @@ def make_output():
                          'Other': other}
     
     df = issueCombiner(df, 'issue', issueCombine_dict)
-
-
-    
-    # stock label entry is what's in the input.html file, field entered by user]
-    user_inp['company_name'] = request.form['company_name']
-    user_inp['product'] = request.form['product']
-    user_inp['ticker_symbol'] = companyTickerSymbols[user_inp['company_name']]
     
     
     stock_payload = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol'], 
            'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
     
-    # possibly last 6 months only 
+    # last 36 months (try to pre-make)
     stock_df = rq.get('https://www.alphavantage.co/query', params = stock_payload)
     stock_df = StringIO(stock_df.text)
     stock_df = pd.read_csv(stock_df)
     
 
-    # stock_df = stock_df.set_index('timestamp', drop = False)
-    
-    df = df[df['company'] == user_inp['company_name']]
+    # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
     df = df[df['product'] == user_inp['product']]
+    df = df[df['company'] == user_inp['company_name']]
     df = df.assign(issue = df['issue'].astype(str))
     issuesPlot = Bar(df, 'issue', ylabel = 'Complaint frequency', 
                      title = 'Issue frequencies for ' + user_inp['product'] + ' products by ' + user_inp['company_name'], legend = False)
