@@ -9,7 +9,7 @@ from bokeh.embed import file_html
 # import simplejson as sj
 # import pickle
 import os
-form wordcloud import WordCloud, STOPWORDS
+from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 
 import sys
