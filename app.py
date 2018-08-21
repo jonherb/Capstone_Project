@@ -10,7 +10,7 @@ from bokeh.embed import file_html
 # import pickle
 import os
 from wordcloud import WordCloud, STOPWORDS
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 import sys
 if sys.version_info[0] < 3: 
