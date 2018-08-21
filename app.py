@@ -6,11 +6,11 @@ from bokeh.charts import Bar
 from bokeh.plotting import figure, output_file, show
 from bokeh.resources import CDN
 from bokeh.embed import file_html
-import requests as rq
-import simplejson as sj
-import pickle
+# import simplejson as sj
+# import pickle
 import os
-import wordcloud
+form wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
 
 import sys
 if sys.version_info[0] < 3: 
@@ -145,8 +145,6 @@ def make_output():
     
     cc_payload = {'$$app_token': CFPB_APP_KEY, '$select': 'company, product, issue, date_received, complaint_what_happened', 
                   '$where': where_string, '$limit':'300000'}
-    
-    cutoff = pd.to_datetime('2015-08-01 00:00:00')
     
     df = rq.get(cc_url, cc_payload)
     df = StringIO(df.text)
@@ -299,6 +297,20 @@ def make_output():
     fig.line('timestamp', 'close', source = df_f)
     """
     
+    # wordcloud image generation:
+    complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
+
+    wordcloud = WordCloud(
+    background_color='white',
+    stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', "n't"],
+    max_words=200,
+    max_font_size=40,
+    scale=3,
+    random_state=1
+    ).generate(big_string)
+
+
+    wordcloud_image = wordcloud.to_image()
     
     
     return  output_html
