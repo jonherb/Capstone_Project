@@ -6,4 +6,3 @@ jinja2
 pip
 simplejson
 pillow
-wordcloud
