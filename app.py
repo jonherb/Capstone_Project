@@ -296,7 +296,7 @@ def make_output():
     
     fig.line('timestamp', 'close', source = df_f)
     """
-    
+    """
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
 
@@ -311,7 +311,7 @@ def make_output():
 
 
     wordcloud_image = wordcloud.to_image()
-    
+    """
     
     return  output_html
 
