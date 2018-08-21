@@ -10,6 +10,7 @@ import requests as rq
 import simplejson as sj
 import pickle
 import os
+import wordcloud
 
 import sys
 if sys.version_info[0] < 3: 
