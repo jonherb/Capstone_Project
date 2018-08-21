@@ -296,7 +296,7 @@ def make_output():
     
     fig.line('timestamp', 'close', source = df_f)
     """
-    """
+    
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
 
@@ -305,13 +305,12 @@ def make_output():
     stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', "n't"],
     max_words=200,
     max_font_size=40,
-    scale=3,
-    random_state=1
+    scale=3
     ).generate(big_string)
 
 
     wordcloud_image = wordcloud.to_image()
-    """
+    
     
     return  output_html
 
