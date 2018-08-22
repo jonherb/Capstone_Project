@@ -306,7 +306,8 @@ def make_output():
     max_words=200,
     max_font_size=40,
     scale=3
-    ).generate(big_string)
+    randomstate=1
+    ).generate(complaints_text)
 
 
     wordcloud_image = wordcloud.to_image()
