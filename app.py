@@ -293,16 +293,22 @@ def make_output():
 
     wordcloud = WordCloud(
     background_color='white',
-    stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', "n't"],
+    stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', 'xxxx-xxxx', "n't"],
     max_words=200,
     max_font_size=40,
     scale=3,
     random_state=1
     ).generate(complaints_text)
     
-
-    wordcloud_image = wordcloud.to_image()
     
+    # saving matplotlib wordcloud image
+    plt.figure()
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    plt.save('static/wordcloud_image')
+    plt.clf()
+    
+    # wordcloud_image = wordcloud.to_image()
     
     return  output_html
 
