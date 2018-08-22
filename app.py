@@ -10,6 +10,8 @@ from bokeh.embed import file_html
 # import pickle
 import os
 from wordcloud import WordCloud, STOPWORDS
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 import sys
@@ -297,10 +299,10 @@ def make_output():
     scale=3,
     random_state=1
     ).generate(complaints_text)
-    """
+    
 
     wordcloud_image = wordcloud.to_image()
-    
+    """
     
     return  output_html
 
