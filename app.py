@@ -305,7 +305,7 @@ def make_output():
     stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', "n't"],
     max_words=200,
     max_font_size=40,
-    scale=3
+    scale=3,
     randomstate=1
     ).generate(complaints_text)
 
