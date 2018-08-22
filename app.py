@@ -300,17 +300,18 @@ def make_output():
     random_state=1
     ).generate(complaints_text)
     
-    
+    """
     # saving matplotlib wordcloud image
     plt.figure()
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
     plt.savefig('wordcloud_image.png')
     plt.clf()
+    """
     
-    # wordcloud_image = wordcloud.to_image()
+    wordcloud_image = wordcloud.to_image()
     
-    return  render_template('output.html') #output_html
+    return wordcloud_image #output_html render_template('output.html')
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
