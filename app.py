@@ -305,7 +305,7 @@ def make_output():
     plt.figure()
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
-    plt.savefig('static/wordcloud_image.png')
+    plt.savefig('/static/wordcloud_image.png')
     plt.clf()
     
     # wordcloud_image = wordcloud.to_image()
