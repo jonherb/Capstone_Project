@@ -10,7 +10,7 @@ from bokeh.embed import file_html
 # import pickle
 import os
 from wordcloud import WordCloud, STOPWORDS
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 import sys
 if sys.version_info[0] < 3: 
@@ -284,19 +284,8 @@ def make_output():
     output_html = file_html(issuesPlot, CDN, 'issues plot')
     
     
+
     """
-    date_filter = to_datetime(user_inp['month'])
-    year_month_filter = str(date_filter.year) + '-' + str(date_filter.month)
-    df_f = df.loc[year_month_filter]
-    df_f_close = df_f.loc[:,['timestamp', 'close']]
-    
-  
-    fig = figure(x_axis_type="datetime", x_axis_label = 'date', y_axis_label = 'closing price', 
-            title = 'Stock Closing Price of ' + user_inp['stock_label'] + ' Over ' + user_inp['month'],)
-    
-    fig.line('timestamp', 'close', source = df_f)
-    """
-    
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
 
@@ -308,7 +297,7 @@ def make_output():
     scale=3,
     random_state=1
     ).generate(complaints_text)
-
+    """
 
     wordcloud_image = wordcloud.to_image()
     
