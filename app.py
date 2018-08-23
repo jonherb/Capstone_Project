@@ -277,7 +277,7 @@ def make_output():
     stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:36]
     
     # monthly dollar-volume, in number of hundreds of millions of dollars
-    monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])
+    # monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])
     
 
     # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
@@ -345,7 +345,7 @@ def make_output():
     
     # wordcloud_image = wordcloud.to_image()
     
-    return  render_template('output.html', data = wordcloud_figData) #output_html
+    return  str(stock_df.shape) # render_template('output.html', data = wordcloud_figData) #output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
