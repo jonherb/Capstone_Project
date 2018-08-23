@@ -293,7 +293,7 @@ def make_output():
     # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
     # 0 to 1 range
     
-    complaintFrequencyScore = round(1.0 * len(df) / (monthlyDolVol + len(df)), 2)
+    # complaintFrequencyScore = round(1.0 * len(df) / (monthlyDolVol + len(df)), 2)
     
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
