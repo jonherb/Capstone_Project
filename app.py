@@ -318,20 +318,13 @@ def make_output():
     
     
     def convert_fig_to_html(fig):
-      # Convert Matplotlib figure 'fig' into a <img> tag for HTML use using base64 encoding. """
+      # Convert Matplotlib figure 'fig' into a <img> tag for HTML use using base64 encoding
         canvas = FigureCanvas(fig) 
         png_output = StringIO()
         canvas.print_png(png_output)
         data = png_output.getvalue().encode('base64')
         return '<img src="data:image/png;base64,{}">'.format(urllib.quote(data.rstrip('\n')))
     
-    def convert_fig_to_html2(fig):
-    canvas = FigureCanvas(fig) 
-    png_output = StringIO()
-    canvas.print_png(png_output)
-    data = png_output.getvalue().encode('base64')
-    
-    return '"data:image/png;base64,{}"'.format(urllib.quote(data.rstrip('\n')))
     
     
     wordcloud_figData = convert_fig_to_html(wordcloud_fig)
