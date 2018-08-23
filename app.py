@@ -276,8 +276,8 @@ def make_output():
     # last 36 months of stock_df (as proxy for company size, in turn a proxy for number of customers served)
     stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:36]
     
-    # monthly dollar-volume, in number of hundreds of millions of dollars
-    monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])/100000000
+    # monthly dollar-volume, in number of tens of millions of dollars
+    monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])/10000000
     
 
     # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
