@@ -137,7 +137,7 @@ def about():
 def get_input():
     return render_template('input.html')
 
-@app.route('/output', methods = ['POST'])
+@app.route('/output', methods = ['GET', 'POST'])
 def make_output():
     user_inp = {}
     user_inp['company_name'] = request.form['company_name']
