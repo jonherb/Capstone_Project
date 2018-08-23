@@ -133,7 +133,7 @@ def home():
 def about():
     return render_template('about.html')
 
-@app.route('/entercompanyproduct', methods = ['GET'])
+@app.route('/entercompanyproduct', methods = ['GET', 'POST'])
 def get_input():
     return render_template('input.html')
 
