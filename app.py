@@ -273,16 +273,11 @@ def make_output():
     stock_payload = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol'], 
            'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
     
-    # last 36 months (try to pre-make)
-    stock_df = rq.get('https://www.alphavantage.co/query', params = stock_payload)
-    stock_df = StringIO(stock_df.text)
-    stock_df = pd.read_csv(stock_df)
-    stock_df = stock_df[:36]
-    stock_df = stock_df.assign(dollar_vol = lambda x: x['close'] * x['volume'])
+    # last 36 months of stock_df (as proxy for company size, in turn a proxy for number of customers served)
+    stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:36]
     
     # monthly dollar-volume, in number of hundreds of millions of dollars
-    monthlyDolVol = np.round(np.mean(stock_df['dollar_vol'])/100000000, 2)
-    
+    monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])
     
 
     # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
@@ -298,7 +293,7 @@ def make_output():
     # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
     # 0 to 1 range
     
-    complaintFrequencyScore = 1.0 * len(df) / (monthlyDolVol + len(df))
+    complaintFrequencyScore = round(1.0 * len(df) / (monthlyDolVol + len(df)), 2)
     
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
