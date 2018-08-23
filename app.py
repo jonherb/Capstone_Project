@@ -278,10 +278,10 @@ def make_output():
     stock_df = StringIO(stock_df.text)
     stock_df = pd.read_csv(stock_df)
     stock_df = stock_df[:36]
-    stock_df.assign(dollar_vol = lambda x: x['close'] * x['volume'])
+    stock_df = stock_df.assign(dollar_vol = lambda x: x['close'] * x['volume'])
     
     # monthly dollar-volume, in number of hundreds of millions of dollars
-    monthlyDolVol = np.mean(stock_df['dollar_vol'])/100000000
+    monthlyDolVol = np.round(np.mean(stock_df['dollar_vol'])/100000000, 2)
     
     
 
@@ -328,7 +328,7 @@ def make_output():
     
     
     def convert_fig_to_html(fig):
-      # Convert Matplotlib figure 'fig' into a <img> tag for HTML use using base64 encoding
+        # converts matplotlib figure 'fig' into a <img> tag for HTML use (base64 encoding)
         canvas = FigureCanvas(fig) 
         png_output = StringIO()
         canvas.print_png(png_output)
