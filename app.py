@@ -133,11 +133,11 @@ def home():
 def about():
     return render_template('about.html')
 
-@app.route('/entercompanyproduct', methods = ['GET', 'POST'])
+@app.route('/entercompanyproduct', methods = ['GET'])
 def get_input():
     return render_template('input.html')
 
-@app.route('/output', methods = ['GET', 'POST'])
+@app.route('/entercompanyproduct', methods = ['POST'])
 def make_output():
     user_inp = {}
     user_inp['company_name'] = request.form['company_name']
