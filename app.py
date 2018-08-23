@@ -13,6 +13,8 @@ from wordcloud import WordCloud, STOPWORDS
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import urllib
 
 import sys
 if sys.version_info[0] < 3: 
@@ -136,7 +138,7 @@ def make_output():
     
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
     
-    # pre-filtering, to hopefully avoid memory overload and timeout errors
+    # pre-filtering, to avoid memory overload and timeout errors
     # both cutoff and where_filter_string have quotes within the string, to be used in filter-query strings in the payload
     # double-quotes in case the company_name has an apostrophe
     # like query is used for company name, as simple = querying doesn't work for companies with & in string
@@ -296,9 +298,35 @@ def make_output():
     stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', 'xxxx-xxxx', "n't"],
     max_words=200,
     max_font_size=40,
-    scale=3,
-    random_state=1
+    scale=3
     ).generate(complaints_text)
+   
+    """
+    # trying another wordcloud image rendering method
+    plt.figure()
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    fig = plt.gcf() 
+    plt.clf()
+    """
+    
+    # wordcloud data string method
+    plt.figure()
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis("off")
+    wordcloud_fig = plt.gcf()
+    
+    
+    def convert_fig_to_html(fig):
+      # Convert Matplotlib figure 'fig' into a <img> tag for HTML use using base64 encoding. """
+        canvas = FigureCanvas(fig) 
+        png_output = StringIO()
+        canvas.print_png(png_output)
+        data = png_output.getvalue().encode('base64')
+        return '<img src="data:image/png;base64,{}">'.format(urllib.quote(data.rstrip('\n')))
+    
+    
+    wordcloud_figData = convert_fig_to_html(wordcloud_fig)
     
     """
     # saving matplotlib wordcloud image
@@ -309,9 +337,9 @@ def make_output():
     plt.clf()
     """
     
-    wordcloud_image = wordcloud.to_image()
+    # wordcloud_image = wordcloud.to_image()
     
-    return wordcloud_image #output_html render_template('output.html')
+    return  render_template('output.html', wordcloud_figData) #output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
