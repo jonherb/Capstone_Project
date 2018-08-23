@@ -286,8 +286,9 @@ def make_output():
     df = df.assign(issue = df['issue'].astype(str))
     issuesPlot = Bar(df, 'issue', ylabel = 'Complaint frequency', 
                      title = 'Issue frequencies for ' + user_inp['product'] + ' products by ' + user_inp['company_name'], legend = False)
-    output_html = file_html(issuesPlot, CDN, 'issues plot')
+    # output_html = file_html(issuesPlot, CDN, 'issues plot')
     
+    bokeh_script, bokeh_div = components(issuesPlot)
     
     # computing the complaint frequency for the prod-company combination (which is now simply the length the the double-filtered df)
     # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
@@ -325,7 +326,8 @@ def make_output():
     wordcloud_figData = convert_fig_to_html(wordcloud_fig)
   
     
-    return output_html # render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData)
+    return render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData, 
+                           bokeh_script = bokeh_script, bokeh_div = bokeh_div)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
