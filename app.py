@@ -121,7 +121,7 @@ companyTickerSymbols['TRANSUNION INTERMEDIATE HOLDINGS, INC.'] = 'TRU'
     
 # keys are first specified in heroku:config for app, in proper directory
 CFPB_APP_KEY = os.environ.get('CFPB_APP_KEY')
-ALPHAADVANTAGE_KEY = os.environ.get('ALPHAADVANTAGEKEY')
+ALPHAADVANTAGE_KEY = os.environ.get('ALPHAADVANTAGE_KEY')
 
 app = Flask(__name__)
 
@@ -277,7 +277,7 @@ def make_output():
     stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:36]
     
     # monthly dollar-volume, in number of hundreds of millions of dollars
-    # monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])
+    monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])
     
 
     # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
@@ -293,7 +293,7 @@ def make_output():
     # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
     # 0 to 1 range
     
-    # complaintFrequencyScore = round(1.0 * len(df) / (monthlyDolVol + len(df)), 2)
+    complaintFrequencyScore = round(1.0 * len(df) / (monthlyDolVol + len(df)), 2)
     
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
@@ -345,7 +345,7 @@ def make_output():
     
     # wordcloud_image = wordcloud.to_image()
     
-    return  str(stock_df.shape) # render_template('output.html', data = wordcloud_figData) #output_html
+    return render_template('output.html', data = wordcloud_figData) #output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
