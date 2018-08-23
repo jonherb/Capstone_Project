@@ -288,9 +288,12 @@ def make_output():
                      title = 'Issue frequencies for ' + user_inp['product'] + ' products by ' + user_inp['company_name'], legend = False)
     output_html = file_html(issuesPlot, CDN, 'issues plot')
     
+    """
+    # reinsert into render_template args, if needed
     bokeh_script, bokeh_div = components(issuesPlot)
     bokeh_script = ' '.join(bokeh_script.split())
     bokeh_div = ' '.join(bokeh_div.split())
+    """
     
     # computing the complaint frequency for the prod-company combination (which is now simply the length the the double-filtered df)
     # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
@@ -328,8 +331,7 @@ def make_output():
     wordcloud_figData = convert_fig_to_html(wordcloud_fig)
   
     
-    return render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData, 
-                           bokeh_script = bokeh_script, bokeh_div = bokeh_div, output_html = output_html)
+    return render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData, output_html = output_html)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
