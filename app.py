@@ -289,6 +289,8 @@ def make_output():
     # output_html = file_html(issuesPlot, CDN, 'issues plot')
     
     bokeh_script, bokeh_div = components(issuesPlot)
+    bokeh_script = ' '.join(bokeh_script.split())
+    bokeh_div = ' '.join(bokeh_div.split())
     
     # computing the complaint frequency for the prod-company combination (which is now simply the length the the double-filtered df)
     # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
