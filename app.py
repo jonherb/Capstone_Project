@@ -325,7 +325,7 @@ def make_output():
     wordcloud_figData = convert_fig_to_html(wordcloud_fig)
   
     
-    return  output_html # render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData)
+    return output_html # render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
