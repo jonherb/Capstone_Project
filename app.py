@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import requests as rq
-# import numpy as np
+import numpy as np
 import pandas as pd
 from bokeh.charts import Bar
 from bokeh.plotting import figure, output_file, show
@@ -277,6 +277,12 @@ def make_output():
     stock_df = rq.get('https://www.alphavantage.co/query', params = stock_payload)
     stock_df = StringIO(stock_df.text)
     stock_df = pd.read_csv(stock_df)
+    stock_df = stock_df[:36]
+    stock_df.assign(dollar_vol = lambda x: x['close'] * x['volume'])
+    
+    # monthly dollar-volume, in number of hundreds of millions of dollars
+    monthlyDolVol = np.mean(stock_df['dollar_vol'])/100000000
+    
     
 
     # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
@@ -288,7 +294,11 @@ def make_output():
     output_html = file_html(issuesPlot, CDN, 'issues plot')
     
     
-
+    # computing the complaint frequency for the prod-company combination (which is now simply the length the the double-filtered df)
+    # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
+    # 0 to 1 range
+    
+    complaintFrequencyScore = 1.0 * len(df) / (monthlyDolVol + len(df))
     
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
