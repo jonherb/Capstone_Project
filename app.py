@@ -5,7 +5,7 @@ import pandas as pd
 from bokeh.charts import Bar
 from bokeh.plotting import figure, output_file, show
 from bokeh.resources import CDN
-from bokeh.embed import file_html
+from bokeh.embed import file_html, components
 # import simplejson as sj
 # import pickle
 import os
@@ -297,7 +297,6 @@ def make_output():
     
     # wordcloud image generation:
     complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
-
     wordcloud = WordCloud(
     background_color='white',
     stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', 'xxxx-xxxx', "n't"],
@@ -306,16 +305,8 @@ def make_output():
     scale=3
     ).generate(complaints_text)
    
-    """
-    # trying another wordcloud image rendering method
-    plt.figure()
-    plt.imshow(wordcloud, interpolation="bilinear")
-    plt.axis("off")
-    fig = plt.gcf() 
-    plt.clf()
-    """
     
-    # wordcloud data string method
+    # wordcloud data string method (to pass to html template)
     plt.figure()
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
@@ -323,7 +314,7 @@ def make_output():
     
     
     def convert_fig_to_html(fig):
-        # converts matplotlib figure 'fig' into a <img> tag for HTML use (base64 encoding)
+        # converts matplotlib figure ito <img> html tag (need to put |safe next to var to mark it for rendering)
         canvas = FigureCanvas(fig) 
         png_output = StringIO()
         canvas.print_png(png_output)
@@ -331,21 +322,10 @@ def make_output():
         return '<img src="data:image/png;base64,{}">'.format(urllib.quote(data.rstrip('\n')))
     
     
-    
     wordcloud_figData = convert_fig_to_html(wordcloud_fig)
+  
     
-    """
-    # saving matplotlib wordcloud image
-    plt.figure()
-    plt.imshow(wordcloud, interpolation="bilinear")
-    plt.axis("off")
-    plt.savefig('wordcloud_image.png')
-    plt.clf()
-    """
-    
-    # wordcloud_image = wordcloud.to_image()
-    
-    return render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData) #output_html
+    return  output_html # render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
