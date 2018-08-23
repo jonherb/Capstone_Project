@@ -286,7 +286,7 @@ def make_output():
     df = df.assign(issue = df['issue'].astype(str))
     issuesPlot = Bar(df, 'issue', ylabel = 'Complaint frequency', 
                      title = 'Issue frequencies for ' + user_inp['product'] + ' products by ' + user_inp['company_name'], legend = False)
-    # output_html = file_html(issuesPlot, CDN, 'issues plot')
+    output_html = file_html(issuesPlot, CDN, 'issues plot')
     
     bokeh_script, bokeh_div = components(issuesPlot)
     bokeh_script = ' '.join(bokeh_script.split())
@@ -329,7 +329,7 @@ def make_output():
   
     
     return render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData, 
-                           bokeh_script = bokeh_script, bokeh_div = bokeh_div)
+                           bokeh_script = bokeh_script, bokeh_div = bokeh_div, output_html = output_html)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
