@@ -126,10 +126,18 @@ ALPHAADVANTAGE_KEY = os.environ.get('ALPHAADVANTAGE_KEY')
 app = Flask(__name__)
 
 @app.route('/', methods = ['GET'])
+def home():
+    return render_template('home.html')
+
+@app.route('/about', methods = ['GET', 'POST'])
+def home():
+    return render_template('about.html')
+
+@app.route('/entercompanyproduct/', methods = ['GET'])
 def get_input():
     return render_template('input.html')
 
-@app.route('/', methods = ['POST'])
+@app.route('/output', methods = ['POST'])
 def make_output():
     user_inp = {}
     user_inp['company_name'] = request.form['company_name']
