@@ -129,8 +129,8 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/about', methods = ['GET'])
-def home():
+@app.route('/about', methods = ['GET', 'POST'])
+def about():
     return render_template('about.html')
 
 @app.route('/entercompanyproduct/', methods = ['GET'])
