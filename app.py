@@ -339,7 +339,7 @@ def make_output():
     
     # wordcloud_image = wordcloud.to_image()
     
-    return  render_template('output.html', wordcloud_figData) #output_html
+    return  render_template('output.html', data = wordcloud_figData) #output_html
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
