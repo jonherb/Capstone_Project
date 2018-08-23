@@ -7,4 +7,3 @@ pip
 simplejson
 pillow
 matplotlib
-
