@@ -20,9 +20,41 @@
  This application aims to aid financial advisory firms, and their clients, by enabling consumers to explore notable complaint 
  issues, and to compare and contast their prevalence across companies that provide a given financial product or service of
  interest. Consumers interested in a particular financial product can compare complaint issues across potential companies of interest, 
- and thereby better fine-tune their dicussions and planning with financial advisors. The primary database utilzed for this app is the U.S.  
- Federal government's Consumer Financial Protection Bureau Complaint Database. </p>
+ and thereby better fine-tune their dicussions and planning with financial advisors. The primary database utilzed is the U.S.  
+ Federal government's Consumer Financial Protection Bureau Complaint Database (CFPB Database). 
+ </p>
+ <p>
+ The CFPB Database logs problems or issues customers report experiencing with finanical companies, such as unexpected fees or poor 
+ fraud protection, in relation to various financial products. There are some redundancies in the set of product categories in the database  
+ (e.g., both 'Bank account or service', and 'Checking or savings account' listed as separate categories; therefore, the for app's analytics 
+ combines categories and reducesthe original 20 to the following 9 product categories:
+ </p>
 
+<ul>
+  <li>Bank_Account</li>
+  <li>Consumer_Loan</li>
+  <li>Credit_Reporting</li>
+  <li>Debt_Collection</li>
+  <li>Money_Transfer</li>
+  <li>Car_Loan</li>
+  <li>Mortgage</li>
+  <li>Student_Loan</li>
+  <li>Other</li>
+</ul>  
+      
+      
+      
+      
+      'Bank_Account': ['Bank account or service', 'Checking or savings account'],
+         'Consumer_Loan' : ['Consumer Loan', 'Payday loan', 'Payday loan, title loan, or personal loan'],
+         'Credit_Card' : ['Credit card', 'Credit card or prepaid card', 'Prepaid card'],
+         'Credit_Reporting' : ['Credit reporting', 'Credit reporting, credit repair services, or other personal consumer reports'],
+         'Debt_Collection' : ['Debt collection'],
+         'Money_Transfer' : ['Money transfers', 'Money transfer, virtual currency, or money service', 'Virtual currency'],
+         'Car_Loan' : ['Vehicle loan or lease'],
+         'Mortgage' : ['Mortgage'],
+         'Student_Loan' : ['Student loan'],
+         'Other' : ['Other financial service']
   </body>
 
     <!-- Bootstrap core CSS -->
