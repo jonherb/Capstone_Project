@@ -151,6 +151,7 @@ def make_output():
     # double-quotes in case the company_name has an apostrophe
     # like query is used for company name, as simple = querying doesn't work for companies with & in string
     cutoff = '"2015-08-01T00:00:00.00"'
+    cutoff_nMonths = 36
     company_filter_string = '"' + user_inp['company_name'] + '"'
     where_string = 'company like ' + company_filter_string + ' AND date_received > ' + cutoff
     
@@ -282,7 +283,7 @@ def make_output():
            'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
     
     # last 36 months of stock_df (as proxy for company size, in turn a proxy for number of customers served)
-    stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:36]
+    stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:cutoff_nMonths]
     
     # monthly dollar-volume, in number of tens of millions of dollars
     monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])/10000000
