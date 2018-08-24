@@ -1,6 +1,21 @@
  
 <html>
+    <head>
+ <link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.css"
+    rel="stylesheet" type="text/css">
+    </head>
+   
+
+
     
+<body>   
 {{ score1 }}   
 <br>
 {{ score2 }}
@@ -9,9 +24,13 @@
 <br>
 <br>
   
-<body>
+
 {{ div|safe }}
 {{ script|safe }}
+    
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.js"></script>
 </body>   
 
   
