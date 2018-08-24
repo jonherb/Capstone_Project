@@ -318,9 +318,12 @@ def make_output():
     monthlyDolVol2 = np.mean([stock_df2['close'][i] * stock_df2['volume'][i] for i in range(len(stock_df2['close']))])/10000000
     monthlyDolVol3 = np.mean([stock_df3['close'][i] * stock_df3['volume'][i] for i in range(len(stock_df3['close']))])/10000000
 
-    complaintFrequencyScore1 = round(1.0 * countCompany1 / (monthlyDolVol1 + countCompany1), 2)
-    complaintFrequencyScore2 = round(1.0 * countCompany2 / (monthlyDolVol2 + countCompany2), 2)
-    complaintFrequencyScore3 = round(1.0 * countCompany3 / (monthlyDolVol3 + countCompany3), 2)
+    complaintFrequencyScore1 = user_inp['company_1'] + ' complaint-frequency score: ' + 
+        str(round(1.0 * countCompany1 / (monthlyDolVol1 + countCompany1), 2))
+    complaintFrequencyScore2 = user_inp['company_2'] + ' complaint-frequency score: ' + 
+        str(round(1.0 * countCompany2 / (monthlyDolVol2 + countCompany2), 2))
+    complaintFrequencyScore3 = user_inp['company_3'] + ' complaint-frequency score: ' + 
+        str(round(1.0 * countCompany3 / (monthlyDolVol3 + countCompany3), 2))
     
     issuesPlot = Bar(df, 'issue',  group = 'company', ylabel = 'Complaint frequency', 
                      title = 'Issue frequencies for ' + user_inp['product'] + ' products',        
