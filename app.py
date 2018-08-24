@@ -358,21 +358,18 @@ def make_output():
     plt.axis("off")
     plt.title(user_inp['company_1'])
     wordcloud_fig1 = plt.gcf()
-    plt.clf()
 
     plt.figure()
     plt.imshow(wordcloud2, interpolation="bilinear")
     plt.axis("off")
     plt.title(user_inp['company_2'])
     wordcloud_fig2 = plt.gcf()
-    plt.clf()
 
     plt.figure()
     plt.imshow(wordcloud3, interpolation="bilinear")
     plt.axis("off")
     plt.title(user_inp['company_3'])
     wordcloud_fig3 = plt.gcf()
-    plt.clf()
     
     wordcloud_figData1 = convert_fig_to_html(wordcloud_fig1)
     wordcloud_figData2 = convert_fig_to_html(wordcloud_fig2)
