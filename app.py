@@ -94,6 +94,14 @@ def issueCombiner(df, categColumn, categCombine_dict):
     stringToCategs = {v: k for k, vv in categCombine_dict.items() for v in vv}
     return df.assign(issue = df[categColumn].map(stringToCategs).astype('category', categories=set(stringToCategs.values())))
 
+def convert_fig_to_html(fig):
+  # convert matplotlib fig into a <img> tag with base64 encoding. """
+    canvas = FigureCanvas(fig) 
+    png_output = StringIO()
+    canvas.print_png(png_output)
+    data = png_output.getvalue().encode('base64')
+    return '<img src="data:image/png;base64,{}">'.format(urllib.quote(data.rstrip('\n')))
+
 """
 dict above was pre-obtained with fuzzy string best-matching to companies having a count of at least 100 complaints (since 2015), when there
 was a match greater than 60 (out of 100), for the decapitalized strings representing company names, as follows:
@@ -140,20 +148,27 @@ def get_input():
 @app.route('/entercompanyproduct', methods = ['POST'])
 def make_output():
     user_inp = {}
-    user_inp['company_name'] = request.form['company_name']
+    user_inp['company_1'] = request.form['company_1']
+    user_inp['company_2'] = request.form['company_2']
+    user_inp['company_3'] = request.form['company_3']
     user_inp['product'] = request.form['product']
-    user_inp['ticker_symbol'] = companyTickerSymbols[user_inp['company_name']]
-    
+    user_inp['ticker_symbol_1'] = companyTickerSymbols[user_inp['company_1']]
+    user_inp['ticker_symbol_2'] = companyTickerSymbols[user_inp['company_2']]
+    user_inp['ticker_symbol_3'] = companyTickerSymbols[user_inp['company_3']]
+
     cc_url = 'http://data.consumerfinance.gov/resource/jhzv-w97w.csv?'
     
     # pre-filtering, to avoid memory overload and timeout errors
     # both cutoff and where_filter_string have quotes within the string, to be used in filter-query strings in the payload
     # double-quotes in case the company_name has an apostrophe
     # like query is used for company name, as simple = querying doesn't work for companies with & in string
-    cutoff = '"2015-08-01T00:00:00.00"'
-    cutoff_nMonths = 36
-    company_filter_string = '"' + user_inp['company_name'] + '"'
-    where_string = 'company like ' + company_filter_string + ' AND date_received > ' + cutoff
+    cutoff = '"2017-08-01T00:00:00.00"'
+    cutoff_nMonths = 12
+    company_filter_string_1 = '"' + user_inp['company_1'] + '"'
+    company_filter_string_2 = '"' + user_inp['company_2'] + '"'
+    company_filter_string_3 = '"' + user_inp['company_3'] + '"'
+    where_string = '(company = ' + company_filter_string_1 + ' or company = ' + company_filter_string_2 + \
+        ' or company = ' + company_filter_string_3 + ') AND date_received > ' + cutoff
     
     
     cc_payload = {'$$app_token': CFPB_APP_KEY, '$select': 'company, product, issue, date_received, complaint_what_happened', 
@@ -279,68 +294,90 @@ def make_output():
     df = issueCombiner(df, 'issue', issueCombine_dict)
     
     
-    stock_payload = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol'], 
+    stock_payload_1 = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol_1'], 
+           'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
+    stock_payload_2 = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol_2'], 
+           'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
+    stock_payload_3 = {'function': 'TIME_SERIES_MONTHLY', 'symbol': user_inp['ticker_symbol_3'], 
            'apikey': ALPHAADVANTAGE_KEY, 'datatype': 'csv'}
     
-    # last 36 months of stock_df (as proxy for company size, in turn a proxy for number of customers served)
-    stock_df = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload).text))[:cutoff_nMonths]
-    
-    # monthly dollar-volume, in number of tens of millions of dollars
-    monthlyDolVol = np.mean([stock_df['close'][i] * stock_df['volume'][i] for i in range(len(stock_df['close']))])/10000000
-    
 
-    # still filtering to ensure only selected company is in df, since original pre-filter was based on a like- query
+    # could prefilter in sosql, with in statement, but will avoid doing so for now:
     df = df[df['product'] == user_inp['product']]
-    df = df[df['company'] == user_inp['company_name']]
     df = df.assign(issue = df['issue'].astype(str))
-    issuesPlot = Bar(df, 'issue', ylabel = 'Complaint frequency', 
-                     title = 'Issue frequencies for ' + user_inp['product'] + ' products by ' + user_inp['company_name'], legend = False)
-    output_html = file_html(issuesPlot, CDN, 'issues plot')
     
-    """
-    # reinsert into render_template args, if needed
-    bokeh_script, bokeh_div = components(issuesPlot)
-    bokeh_script = ' '.join(bokeh_script.split())
-    bokeh_div = ' '.join(bokeh_div.split())
-    """
+    countCompany1 = len(df[df['company'] == user_inp['company_1']])
+    countCompany2 = len(df[df['company'] == user_inp['company_2']])
+    countCompany3 = len(df[df['company'] == user_inp['company_3']])
+
+    stock_df1 = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload_1).text))[:cutoff_nMonths]
+    stock_df2 = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload_2).text))[:cutoff_nMonths]
+    stock_df3 = pd.read_csv(StringIO(rq.get('https://www.alphavantage.co/query', stock_payload_3).text))[:cutoff_nMonths]
+
+    monthlyDolVol1 = np.mean([stock_df1['close'][i] * stock_df1['volume'][i] for i in range(len(stock_df1['close']))])/10000000
+    monthlyDolVol2 = np.mean([stock_df2['close'][i] * stock_df2['volume'][i] for i in range(len(stock_df2['close']))])/10000000
+    monthlyDolVol3 = np.mean([stock_df3['close'][i] * stock_df3['volume'][i] for i in range(len(stock_df3['close']))])/10000000
+
+    complaintFrequencyScore1 = round(1.0 * countCompany1 / (monthlyDolVol1 + countCompany1), 2)
+    complaintFrequencyScore2 = round(1.0 * countCompany2 / (monthlyDolVol2 + countCompany2), 2)
+    complaintFrequencyScore3 = round(1.0 * countCompany3 / (monthlyDolVol3 + countCompany3), 2)
     
-    # computing the complaint frequency for the prod-company combination (which is now simply the length the the double-filtered df)
-    # divided by a normalization factor depending on the average number of hundeds of millions dollars in stock volume per month;
-    # 0 to 1 range
+    issuesPlot = Bar(df, 'issue',  group = 'company', ylabel = 'Complaint frequency', 
+                     title = 'Issue frequencies for ' + user_inp['product'] + ' products',        
+                      xlabel = ' ')
     
-    complaintFrequencyScore = round(1.0 * len(df) / (monthlyDolVol + len(df)), 2)
-    
-    # wordcloud image generation:
-    complaints_text = ' '.join(df['complaint_what_happened'].dropna().tolist()).lower()
-    wordcloud = WordCloud(
+    complaints_text1 = ' '.join(df[df['company'] == user_inp['company_1']]['complaint_what_happened'].dropna().tolist()).lower()
+    wordcloud1 = WordCloud(
     background_color='white',
     stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', 'xxxx-xxxx', "n't"],
     max_words=200,
     max_font_size=40,
     scale=3
-    ).generate(complaints_text)
-   
+    ).generate(complaints_text1)
+
+    complaints_text2 = ' '.join(df[df['company'] == user_inp['company_2']]['complaint_what_happened'].dropna().tolist()).lower()
+    wordcloud2 = WordCloud(
+    background_color='white',
+    stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', 'xxxx-xxxx', "n't"],
+    max_words=200,
+    max_font_size=40,
+    scale=3
+    ).generate(complaints_text2)
+
+    complaints_text3 = ' '.join(df[df['company'] == user_inp['company_3']]['complaint_what_happened'].dropna().tolist()).lower()
+    wordcloud3 = WordCloud(
+    background_color='white',
+    stopwords= list(STOPWORDS) + ['x', 'xx', 'xxx', 'xxxx', 'xxxx-xxxx', "n't"],
+    max_words=200,
+    max_font_size=40,
+    scale=3
+    ).generate(complaints_text3)
     
-    # wordcloud data string method (to pass to html template)
     plt.figure()
-    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.imshow(wordcloud1, interpolation="bilinear")
     plt.axis("off")
-    wordcloud_fig = plt.gcf()
+    plt.title(user_inp['company_1'])
+    wordcloud_fig1 = plt.gcf()
+    plt.clf()
+
+    plt.figure()
+    plt.imshow(wordcloud2, interpolation="bilinear")
+    plt.axis("off")
+    plt.title(user_inp['company_2'])
+    wordcloud_fig2 = plt.gcf()
+    plt.clf()
+
+    plt.figure()
+    plt.imshow(wordcloud3, interpolation="bilinear")
+    plt.axis("off")
+    plt.title(user_inp['company_3'])
+    wordcloud_fig3 = plt.gcf()
+    plt.clf()
+
     
-    
-    def convert_fig_to_html(fig):
-        # converts matplotlib figure ito <img> html tag (need to put |safe next to var to mark it for rendering)
-        canvas = FigureCanvas(fig) 
-        png_output = StringIO()
-        canvas.print_png(png_output)
-        data = png_output.getvalue().encode('base64')
-        return '<img src="data:image/png;base64,{}">'.format(urllib.quote(data.rstrip('\n')))
-    
-    
-    wordcloud_figData = convert_fig_to_html(wordcloud_fig)
-  
-    
-    return render_template('output.html', score = complaintFrequencyScore, data = wordcloud_figData, output_html = output_html)
+    return render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2,  
+                           score3 = complaintFrequencyScore3, data1 = wordcloud_figData1, data2 = wordcloud_figData2, 
+                           data3 = wordcloud_figData3)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 

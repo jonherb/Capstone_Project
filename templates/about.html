@@ -22,7 +22,7 @@
  <p>
  The CFPB Database logs problems or issues customers report experiencing with finanical companies, such as unexpected fees or poor 
  fraud protection, in relation to various financial products. There are some redundancies in the set of product categories in the database  
- (e.g., both 'Bank account or service', and 'Checking or savings account' listed as separate categories; therefore, the app 
+ (e.g., both 'Bank account or service', and 'Checking or savings account' are listed as separate categories; therefore, the app 
  combines categories and reduces the original 20 to the following 9 product categories:
  </p>
 
@@ -63,7 +63,7 @@ The user can view frequency plots for the different complaint issues reported by
 <p>
 The user also receives feedback regarding how likely complaints on a financial product are to arise for different companies. A complaint-frequency score is computed for a given input product and company, based on the number of complaints in the database for the company-product combination, and a normalization factor intended as a proxy for company size, and therefore number of customers. That is, the normalization-factor is the company's mean monthly dollar-volume (in tens-of-millions of dollars), added to the same frequency as is in the numerator (to obtain an index that ranges from 0 to 1).   
 <p>
-For a sufficient base of analytics, the app includes as potential input companies only those with at least 100 complaints since Aug., 2015. Only complaints since this date are considered (to limit processing time for the realtime generated plots). In addition, for the dollar-volume computation, companies must be pubicly traded, as this computation depends on the Alphaadvantage stock ticker database. Companies satisfying these conditions, and their stock ticker symbols as obtained by fuzzy string matching of company names across databases, are stored in the app files ahead of time.
+For a sufficient base of analytics, the app includes as potential input companies only those with at least 100 complaints since Aug., 2015. Only complaints since this date are considered (to limit processing time for the realtime generated plots). In addition, for the dollar-volume computation, companies must be pubicly traded, as this computation depends on the AlphaAdvantage stock ticker database. Companies satisfying these conditions, and their stock ticker symbols as obtained by fuzzy string matching of company names across databases, are stored in the app files ahead of time.
 </p>
 <p>
 As the app functions via live API calls to the CFPB database (and secondarily, to the AlphaAdvantage database to compute dollar-volume), the API's SOSQL functionality is utilized to pre-filter data by the user's product and company input. The generated Issue and Wordcloud plots, in combination with the complaint-frequency index for different companies offering the product aid in the user's informed decisions regarding different company products, and can highlight areas of concern for discussion with the user's financial advisor.
