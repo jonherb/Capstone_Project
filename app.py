@@ -376,13 +376,13 @@ def make_output():
     wordcloud_figData3 = convert_fig_to_html(wordcloud_fig3)
     
     
-    
+    script, div = components(issuesPlot)
     
 
     
     return render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2,  
                            score3 = complaintFrequencyScore3, data1 = wordcloud_figData1, data2 = wordcloud_figData2, 
-                           data3 = wordcloud_figData3)
+                           data3 = wordcloud_figData3, bok_script = script, bok_div = div)
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
