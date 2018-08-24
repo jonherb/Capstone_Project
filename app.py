@@ -382,10 +382,15 @@ def make_output():
     """
     print request.form['full_form']
     
-    return request.form['full_form'] """ render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2,  
-                           score3 = complaintFrequencyScore3, data1 = wordcloud_figData1, data2 = wordcloud_figData2, 
-                           data3 = wordcloud_figData3, script = script, div = div) """
+    
+    
+    """ render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2, score3 = 
+    complaintFrequencyScore3, data1 = wordcloud_figData1, data2 = wordcloud_figData2, 
+    data3 = wordcloud_figData3, script = script, div = div) """
 
+
+    
+    return request.form['full_form'] 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
 if __name__ == '__main__':
