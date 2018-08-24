@@ -147,6 +147,8 @@ def get_input():
 
 @app.route('/entercompanyproduct', methods = ['POST'])
 def make_output():
+    
+    """
     user_inp = {}
     user_inp['company_1'] = request.form['company_1']
     user_inp['company_2'] = request.form['company_2']
@@ -377,12 +379,12 @@ def make_output():
     
     
     script, div = components(issuesPlot)
+    """
+    print request.form('full_form')
     
-
-    
-    return render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2,  
+    return 'test' """ render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2,  
                            score3 = complaintFrequencyScore3, data1 = wordcloud_figData1, data2 = wordcloud_figData2, 
-                           data3 = wordcloud_figData3, script = script, div = div)
+                           data3 = wordcloud_figData3, script = script, div = div) """
 
 
 # port grabbed from heroku deployment environ (set to default 5000 if no environ setting) 
