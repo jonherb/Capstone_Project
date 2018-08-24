@@ -373,6 +373,10 @@ def make_output():
     plt.title(user_inp['company_3'])
     wordcloud_fig3 = plt.gcf()
     plt.clf()
+    
+    wordcloud_figData1 = convert_fig_to_html(wordcloud_fig1)
+    wordcloud_figData2 = convert_fig_to_html(wordcloud_fig2)
+    wordcloud_figData3 = convert_fig_to_html(wordcloud_fig3)
 
     
     return render_template('output.html', score1 = complaintFrequencyScore1,  score2 = complaintFrequencyScore2,  
