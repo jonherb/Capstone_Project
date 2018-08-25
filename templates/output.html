@@ -1,6 +1,20 @@
  
 <html>
-    <head>
+
+    
+ <div class="row">
+  <div class="column">
+    {{ data1|safe }}
+  </div>
+  <div class="column">
+    {{ data2|safe }}
+  </div>
+  <div class="column">
+    {{ data3|safe }}
+  </div>
+</div>
+
+<head>
  <link
     href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css"
     rel="stylesheet" type="text/css">
@@ -11,9 +25,21 @@
     href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.css"
     rel="stylesheet" type="text/css">
     </head>
+    
    
+    
 
+  
 
+{{ div|safe }}
+{{ script|safe }}
+    
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.js"></script>
+    
+    
+    
     
 <body>   
 {{ score1 }}   
@@ -23,28 +49,14 @@
 {{ score3 }}
 <br>
 <br>
-  
-
-{{ div|safe }}
-{{ script|safe }}
     
-<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
-<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.js"></script>
-<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.js"></script>
 </body>   
 
   
 
     
 
-<br>
-<br>
-<br/>
-{{ data1|safe }}
-<br>
-{{ data2|safe }}
-<br>
-{{ data3|safe }}
+
 
    
 </html>
