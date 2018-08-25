@@ -2,20 +2,22 @@
 <html>
 
 <head>
-<link type="text/css" rel="stylesheet" href="/static/style.css"/>
+ <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
- <div class="row">
-  <div class="column">
-    {{ data1|safe }}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      {{ data1|safe }}
+    </div>
+    <div class="col-sm">
+      {{ data2|safe }}
+    </div>
+    <div class="col-sm">
+      {{data2 | safe }}
+    </div>
   </div>
-  <div class="column">
-    {{ data2|safe }}
-  </div>
-  <div class="column">
-    {{ data3|safe }}
-  </div>
-</div>
+</div>>
 </body>
 
 <div>    
