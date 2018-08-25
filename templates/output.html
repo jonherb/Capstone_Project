@@ -2,8 +2,9 @@
 <html>
 
 <head>
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 </head>
 <body>
   <div class="row no-gutters">
@@ -21,42 +22,32 @@
 
 <div>    
 <head>
- <link
-    href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css"
-    rel="stylesheet" type="text/css">
-<link
-    href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.css"
-    rel="stylesheet" type="text/css">
-<link
-    href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.css"
-    rel="stylesheet" type="text/css">
+<link href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.css" rel="stylesheet" type="text/css">
 </head>
   
 <body>
-{{ div|safe }}
-{{ script|safe }}
+<div class="row">
+<div class="col-xl-6">
+   {{ div|safe }}
+   {{ script|safe }}
+ </div>
+    <div class="col-xl-6">
+    {{ score1 }}
+        <br>
+    {{ score2 }}
+        <br>
+    {{ score3 }}
+</div>
+</div>
     
 <script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
 <script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.4.min.js"></script>
 <script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.4.min.js"></script>
 </body>
-</div>
-    
-    
-<div>   
-<body>   
-{{ score1 }}   
-<br>
-{{ score2 }}
-<br>
-{{ score3 }}
-<br>
-<br>
-    
-</body>   
 
-</div>
-
+    
     
 
 
